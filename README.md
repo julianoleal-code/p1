@@ -40,25 +40,6 @@ npm run dev
 
 ---
 
-## Estrutura do Projeto
-
-```
-weathernow/
-├── app/
-│   ├── page.tsx           ← Tela principal com busca
-│   ├── layout.tsx         ← Layout raiz
-│   ├── sobre/
-│   │   └── page.tsx       ← Rota estática /sobre
-│   └── cidade/
-│       └── [name]/
-│           └── page.tsx   ← Rota dinâmica /cidade/:name
-├── components/
-│   ├── WeatherCard.tsx    ← Componente de exibição do clima
-│   └── SearchBar.tsx      ← Componente de busca
-├── .env.local             ← API Key (não sobe no GitHub!)
-└── README.md
-```
-
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
