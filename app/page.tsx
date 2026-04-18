@@ -1,14 +1,10 @@
 "use client";
 
-// Página principal - tela de busca por cidade
-// "use client" porque usamos useState e eventos de clique
-
 import { useState } from "react";
 import Link from "next/link";
 import SearchBar from "../components/SearchBar";
 import WeatherCard from "../components/WeatherCard";
 
-// Tipo para guardar os dados que a API retorna
 type DadosClima = {
   name: string;
   main: {
@@ -29,25 +25,17 @@ type DadosClima = {
 };
 
 export default function Home() {
-  // Estado que guarda os dados do clima buscados
   const [dados, setDados] = useState<DadosClima | null>(null);
-
-  // Estado para mostrar mensagens de erro
   const [erro, setErro] = useState("");
-
-  // Estado para mostrar "Carregando..." enquanto busca
   const [carregando, setCarregando] = useState(false);
 
-  // Função chamada quando o usuário busca uma cidade
   async function buscarClima(cidade: string) {
     setCarregando(true);
     setErro("");
     setDados(null);
 
-    // Pega a chave da API do arquivo .env.local
     const chave = process.env.NEXT_PUBLIC_WEATHER_KEY;
 
-    // Se não tem chave configurada, usa dados de exemplo para demonstração
     if (!chave || chave === "sua_chave_aqui") {
       setTimeout(() => {
         setDados({
@@ -58,17 +46,15 @@ export default function Home() {
           sys: { country: "BR" },
         });
         setCarregando(false);
-      }, 800); // simula tempo de resposta da API
+      }, 800);
       return;
     }
 
-    // Monta a URL da API com a cidade e a chave
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${cidade}&appid=${chave}&units=metric&lang=pt_br`;
 
     try {
       const resposta = await fetch(url);
 
-      // Se a API retornou erro, mostra mensagem específica
       if (!resposta.ok) {
         if (resposta.status === 401) {
           setErro("Chave da API inválida ou ainda não ativada. Aguarde alguns minutos e tente novamente.");
@@ -81,7 +67,6 @@ export default function Home() {
         return;
       }
 
-      // Converte a resposta para JSON
       const json = await resposta.json();
       setDados(json);
     } catch (e) {
@@ -92,49 +77,78 @@ export default function Home() {
   }
 
   return (
-    <main style={{ padding: "40px", fontFamily: "Arial, sans-serif" }}>
-      <h1>☁️ WeatherNow</h1>
-      <p>Busque o clima de qualquer cidade do mundo!</p>
+    <>
+      <header>
+        <nav>
+          <div className="logo">⛅ WeatherNow</div>
+          <ul className="nav-links">
+            <li><Link href="/">Início</Link></li>
+            <li><Link href="/sobre">Sobre</Link></li>
+          </ul>
+        </nav>
+      </header>
 
-      {/* Componente de busca */}
-      <SearchBar onSearch={buscarClima} />
-
-      {/* Mensagem de carregando */}
-      {carregando && <p>Carregando...</p>}
-
-      {/* Mensagem de erro */}
-      {erro && <p style={{ color: "red" }}>{erro}</p>}
-
-      {/* Resultado do clima */}
-      {dados && (
-        <div>
-          {/* Componente que exibe os dados do clima */}
-          <WeatherCard
-            cidade={dados.name}
-            temperatura={dados.main.temp}
-            sensacaoTermica={dados.main.feels_like}
-            descricao={dados.weather[0].description}
-            icone={dados.weather[0].icon}
-          />
-
-          {/* Link para a página detalhada da cidade */}
-          <div style={{ marginTop: "16px" }}>
-            <Link
-              href={`/cidade/${dados.name}`}
-              style={{ color: "#0070f3", fontSize: "16px" }}
-            >
-              Ver página detalhada de {dados.name} →
-            </Link>
-          </div>
+      <main style={{ textAlign: "center" }}>
+        <div style={{ marginBottom: "3rem" }}>
+          <h1 style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>Previsão do Tempo</h1>
+          <p style={{ fontSize: "1.1rem", color: "var(--text-secondary)" }}>
+            Descubra o clima de qualquer cidade do mundo em tempo real
+          </p>
         </div>
-      )}
 
-      {/* Link para a página Sobre */}
-      <div style={{ marginTop: "40px" }}>
-        <Link href="/sobre" style={{ color: "#666", fontSize: "14px" }}>
-          Sobre este projeto
-        </Link>
-      </div>
-    </main>
+        <div style={{ marginBottom: "2rem" }}>
+          <SearchBar onSearch={buscarClima} />
+        </div>
+
+        {carregando && (
+          <div style={{ padding: "2rem", textAlign: "center" }}>
+            <p style={{ fontSize: "1.1rem", color: "var(--text-secondary)" }}>⏳ Carregando dados...</p>
+          </div>
+        )}
+
+        {erro && (
+          <div style={{
+            padding: "1rem",
+            margin: "1rem 0",
+            backgroundColor: "#ffebee",
+            border: "1px solid #ef5350",
+            borderRadius: "8px",
+            color: "#c62828",
+          }}>
+            {erro}
+          </div>
+        )}
+
+        {dados && (
+          <div style={{ marginTop: "2rem" }}>
+            <WeatherCard
+              cidade={dados.name}
+              temperatura={dados.main.temp}
+              sensacaoTermica={dados.main.feels_like}
+              descricao={dados.weather[0].description}
+              icone={dados.weather[0].icon}
+            />
+
+            <div style={{ marginTop: "2rem" }}>
+              <Link href={`/cidade/${dados.name}`} style={{
+                display: "inline-block",
+                padding: "0.75rem 1.5rem",
+                backgroundColor: "var(--primary)",
+                color: "white",
+                borderRadius: "8px",
+                fontWeight: "600",
+                transition: "background-color 0.3s ease",
+              }}>
+                Ver detalhes completos →
+              </Link>
+            </div>
+          </div>
+        )}
+      </main>
+
+      <footer>
+        <p>&copy; 2026 WeatherNow. Desenvolvido com Next.js e OpenWeatherMap API.</p>
+      </footer>
+    </>
   );
 }

@@ -1,16 +1,11 @@
-// Esse componente mostra as informações do clima de uma cidade
-// Recebe os dados do clima como props
-
 import Image from "next/image";
 
-// Tipo que define o que esse componente precisa receber
 type WeatherCardProps = {
   cidade: string;
   temperatura: number;
   sensacaoTermica: number;
   descricao: string;
   icone: string;
-  // Esses campos são opcionais - só aparecem na página da cidade
   umidade?: number;
   vento?: number;
   pais?: string;
@@ -26,43 +21,75 @@ export default function WeatherCard({
   vento,
   pais,
 }: WeatherCardProps) {
-  // Monta a URL do ícone usando o código retornado da API
-  const urlIcone = `https://openweathermap.org/img/wn/${icone}@2x.png`;
+  const urlIcone = `https://openweathermap.org/img/wn/${icone}@4x.png`;
 
   return (
-    <div
-      style={{
-        border: "1px solid #93c5fd",
-        borderRadius: "12px",
-        padding: "20px",
-        maxWidth: "400px",
-        background: "linear-gradient(135deg, #1e3a5f, #2563eb)",
-        color: "white",
-        boxShadow: "0 4px 16px rgba(37, 99, 235, 0.4)",
-      }}
-    >
-      <h2 style={{ marginBottom: "4px" }}>
+    <div style={{
+      backgroundColor: "var(--surface)",
+      border: "1px solid var(--border)",
+      borderRadius: "16px",
+      padding: "2rem",
+      maxWidth: "450px",
+      margin: "0 auto",
+      boxShadow: "var(--shadow)",
+      background: "linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)",
+      color: "white",
+    }}>
+      <h2 style={{ marginBottom: "0.5rem", fontSize: "1.8rem" }}>
         {cidade} {pais && `(${pais})`}
       </h2>
 
-      {/* Ícone do tempo */}
-      <Image
-        src={urlIcone}
-        alt={descricao}
-        width={80}
-        height={80}
-      />
+      <div style={{ display: "flex", alignItems: "center", marginBottom: "1.5rem" }}>
+        <Image
+          src={urlIcone}
+          alt={descricao}
+          width={120}
+          height={120}
+          style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.1))" }}
+        />
+        <div>
+          <p style={{ fontSize: "2.5rem", fontWeight: "700", margin: "0" }}>
+            {temperatura.toFixed(1)}°C
+          </p>
+          <p style={{ margin: "0.25rem 0 0 0", opacity: 0.95 }}>
+            Sensação térmica: {sensacaoTermica.toFixed(1)}°C
+          </p>
+        </div>
+      </div>
 
-      {/* Dados principais */}
-      <p style={{ fontSize: "24px", fontWeight: "bold" }}>
-        🌡️ {temperatura.toFixed(1)}°C
+      <p style={{
+        textTransform: "capitalize",
+        fontSize: "1.1rem",
+        margin: "1rem 0",
+        opacity: 0.95,
+      }}>
+        {descricao}
       </p>
-      <p>Sensação térmica: {sensacaoTermica.toFixed(1)}°C</p>
-      <p style={{ textTransform: "capitalize" }}>Clima: {descricao}</p>
 
-      {/* Dados extras - aparecem só se forem passados */}
-      {umidade !== undefined && <p>💧 Umidade: {umidade}%</p>}
-      {vento !== undefined && <p>💨 Vento: {vento} m/s</p>}
+      {umidade !== undefined && (
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "0.5rem",
+          marginBottom: "0.75rem",
+          fontSize: "1rem",
+        }}>
+          <span>💧</span>
+          <span>Umidade: {umidade}%</span>
+        </div>
+      )}
+
+      {vento !== undefined && (
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "0.5rem",
+          fontSize: "1rem",
+        }}>
+          <span>💨</span>
+          <span>Vento: {vento.toFixed(1)} m/s</span>
+        </div>
+      )}
     </div>
   );
 }

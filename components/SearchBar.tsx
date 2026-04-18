@@ -1,58 +1,85 @@
 "use client";
 
-// Esse componente é a barra de busca por cidade
-// Recebe uma função onSearch que é chamada quando o usuário clica em Buscar
-
 import { useState } from "react";
 
-// Props: o que esse componente recebe
 type SearchBarProps = {
   onSearch: (cidade: string) => void;
 };
 
 export default function SearchBar({ onSearch }: SearchBarProps) {
-  // Estado para guardar o que o usuário digitou
   const [cidade, setCidade] = useState("");
 
-  // Função chamada quando clica no botão
-  function handleClick() {
+  const handleSearch = () => {
     if (cidade.trim() !== "") {
       onSearch(cidade.trim());
     }
-  }
+  };
 
   return (
-    <div style={{ display: "flex", gap: "8px", marginBottom: "20px" }}>
+    <div style={{
+      display: "flex",
+      gap: "0.75rem",
+      maxWidth: "500px",
+      margin: "0 auto",
+      flexWrap: "wrap",
+      justifyContent: "center",
+    }}>
       <input
         type="text"
-        placeholder="Digite o nome da cidade..."
+        placeholder="Ex: Rio de Janeiro, São Paulo..."
         value={cidade}
         onChange={(e) => setCidade(e.target.value)}
-        // Permite buscar ao pressionar Enter
         onKeyDown={(e) => {
-          if (e.key === "Enter") handleClick();
+          if (e.key === "Enter") handleSearch();
         }}
         style={{
-          padding: "10px",
-          fontSize: "16px",
-          width: "300px",
-          border: "1px solid #ccc",
-          borderRadius: "4px",
+          flex: "1 1 250px",
+          padding: "0.875rem",
+          fontSize: "1rem",
+          border: "2px solid var(--border)",
+          borderRadius: "8px",
+          backgroundColor: "var(--surface)",
+          color: "var(--text-primary)",
+          transition: "border-color 0.3s ease, box-shadow 0.3s ease",
+          minWidth: "250px",
+        }}
+        onFocus={(e) => {
+          e.currentTarget.style.borderColor = "var(--primary)";
+          e.currentTarget.style.boxShadow = "0 0 0 3px rgba(30, 136, 229, 0.1)";
+        }}
+        onBlur={(e) => {
+          e.currentTarget.style.borderColor = "var(--border)";
+          e.currentTarget.style.boxShadow = "none";
         }}
       />
       <button
-        onClick={handleClick}
+        onClick={handleSearch}
         style={{
-          padding: "10px 20px",
-          fontSize: "16px",
-          backgroundColor: "#0070f3",
+          padding: "0.875rem 2rem",
+          fontSize: "1rem",
+          fontWeight: "600",
+          backgroundColor: "var(--primary)",
           color: "white",
           border: "none",
-          borderRadius: "4px",
+          borderRadius: "8px",
           cursor: "pointer",
+          transition: "background-color 0.3s ease, transform 0.2s ease",
+          boxShadow: "var(--shadow)",
+        }}
+        onMouseOver={(e) => {
+          e.currentTarget.style.backgroundColor = "var(--primary-dark)";
+        }}
+        onMouseOut={(e) => {
+          e.currentTarget.style.backgroundColor = "var(--primary)";
+        }}
+        onMouseDown={(e) => {
+          e.currentTarget.style.transform = "scale(0.98)";
+        }}
+        onMouseUp={(e) => {
+          e.currentTarget.style.transform = "scale(1)";
         }}
       >
-        Buscar
+        🔍 Buscar
       </button>
     </div>
   );

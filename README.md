@@ -1,9 +1,9 @@
-# WeatherNow ☁️
+# WeatherNow 
 
 Portal de previsão do tempo desenvolvido com **Next.js 14** e **App Router**.  
 Consome a API da [OpenWeatherMap](https://openweathermap.org/api) para exibir clima em tempo real por cidade.
 
-**Aluno:** Luiz Marcelo Bichuli Leal  
+**Aluno:** Juliano Bichuli Leal  
 **Curso:** Tecnologia em Análise e Desenvolvimento de Sistemas – FAETERJ Barra Mansa  
 **Disciplina:** Programação e Design para Web II
 
@@ -18,7 +18,7 @@ Consome a API da [OpenWeatherMap](https://openweathermap.org/api) para exibir cl
 NEXT_PUBLIC_WEATHER_KEY=sua_chave_aqui
 ```
 
-> ⚠️ **Nunca suba o `.env.local` para o GitHub!** Ele já está no `.gitignore`.
+> **Nunca suba o `.env.local` para o GitHub!** Ele já está no `.gitignore`.
 
 ---
 
