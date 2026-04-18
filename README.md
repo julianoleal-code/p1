@@ -1,4 +1,4 @@
-# WeatherNow 
+WeatherNow 
 
 Portal de previsão do tempo desenvolvido com **Next.js 14** e **App Router**.  
 Consome a API da [OpenWeatherMap](https://openweathermap.org/api) para exibir clima em tempo real por cidade.
